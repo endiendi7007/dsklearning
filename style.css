@@ -168,3 +168,8 @@ transition: all 1s ease;
 .progress-bar {
   transition: width 0.15s ease;
 }
+
+.header-logo{
+opacity:0;
+transition:opacity 0.3s ease;
+}
