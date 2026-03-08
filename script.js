@@ -1,4 +1,4 @@
-// script.js
+// script.js (replace the whole file)
 const progressBar = document.querySelector(".progress-bar");
 const loadingScreen = document.getElementById("loading-screen");
 const loaderLogo = document.querySelector(".loader-logo");
@@ -9,7 +9,7 @@ let websiteLoaded = false;
 let progressInterval = null;
 let checkInterval = null;
 
-/* Fast progress to 90% */
+/* Progress quickly up to 90% */
 function startProgressTo90() {
   progressInterval = setInterval(() => {
     progress += 4;
@@ -25,7 +25,7 @@ function startProgressTo90() {
   }, 40);
 }
 
-/* Check repeatedly until the page actually finishes loading */
+/* Repeatedly check until the page actually finishes loading */
 function startCheckingLoaded() {
   checkInterval = setInterval(() => {
     if (websiteLoaded) {
@@ -43,30 +43,29 @@ window.addEventListener("load", () => {
 
 /* Move to 100% then wait for the width transition to finish, then animate logo */
 function finalizeTo100AndAnimate() {
-  // ensure CSS transition for width is applied before changing width
-  // (small timeout makes sure the browser registers the change)
+  // small gap so CSS transition is applied reliably
   setTimeout(() => {
     progressBar.style.width = "100%";
   }, 50);
 
-  // Wait for the progress bar width transition to end, then start logo animation
+  // When the width transition completes, start the logo animation.
   const onBarTransition = (e) => {
     if (e.propertyName !== "width") return;
     progressBar.removeEventListener("transitionend", onBarTransition);
-    // small visible pause at 100% to satisfy user dopamine
+    // small visible pause at 100% before movement (tweakable)
     setTimeout(() => {
       startLogoMoveAnimation();
-    }, 200); // tweakable pause (200ms)
+    }, 200);
   };
 
   progressBar.addEventListener("transitionend", onBarTransition);
 }
 
-/* Create a clone, translate+scale it into the header logo, swap, then hide loader */
+/* Animate a cloned logo from loader to header using center-based translation + scale */
 function startLogoMoveAnimation() {
-  // safety: ensure both elements exist
   if (!loaderLogo || !headerLogo) {
-    // fallback: just hide loader
+    // fallback: hide overlay if logos missing
+    loadingScreen.style.transition = "opacity 0.45s ease";
     loadingScreen.style.opacity = "0";
     setTimeout(() => (loadingScreen.style.display = "none"), 450);
     return;
@@ -75,7 +74,20 @@ function startLogoMoveAnimation() {
   const loaderRect = loaderLogo.getBoundingClientRect();
   const headerRect = headerLogo.getBoundingClientRect();
 
-  // create clone
+  // compute center points (viewport coords)
+  const loaderCenterX = loaderRect.left + loaderRect.width / 2;
+  const loaderCenterY = loaderRect.top + loaderRect.height / 2;
+  const headerCenterX = headerRect.left + headerRect.width / 2;
+  const headerCenterY = headerRect.top + headerRect.height / 2;
+
+  // translation needed (from loader center to header center)
+  const deltaX = headerCenterX - loaderCenterX;
+  const deltaY = headerCenterY - loaderCenterY;
+
+  // scale factor (header width / loader width)
+  const scale = headerRect.width / loaderRect.width;
+
+  // create clone and position it exactly over the loader logo
   const clone = loaderLogo.cloneNode(true);
   clone.style.position = "fixed";
   clone.style.left = loaderRect.left + "px";
@@ -85,40 +97,38 @@ function startLogoMoveAnimation() {
   clone.style.margin = "0";
   clone.style.zIndex = "10000";
   clone.style.pointerEvents = "none";
-  clone.style.transformOrigin = "0 0"; // origin top-left for correct scale
-  clone.style.transition = "transform 1.2s cubic-bezier(.22,.9,.28,1), opacity 0.3s ease"; // visible slow move
+  clone.style.transformOrigin = "center center";
+  clone.style.willChange = "transform, opacity";
+  // slower, visible move; adjust the duration here if you want faster/slower
+  clone.style.transition = "transform 1.4s cubic-bezier(.22,.9,.28,1), opacity 0.25s ease";
+
   document.body.appendChild(clone);
 
-  // hide original loader logo so user only sees the clone moving
+  // hide the original loader logo during animation (keeps only clone visible)
   loaderLogo.style.visibility = "hidden";
 
-  // ensure header logo is hidden until clone finishes
+  // keep header logo hidden until clone finishes
   headerLogo.style.opacity = "0";
 
-  // compute translation and scale
-  const deltaX = headerRect.left - loaderRect.left;
-  const deltaY = headerRect.top - loaderRect.top;
-  const scale = headerRect.width / loaderRect.width;
-
-  // trigger animation on next frame
+  // apply transform on next frame to ensure transition runs
   requestAnimationFrame(() => {
     clone.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scale})`;
   });
 
-  // when clone animation finishes, show header logo, remove clone, then hide loader overlay
+  // when the clone finishes moving, reveal header logo and remove clone, then hide overlay
   const onCloneEnd = (e) => {
-    // wait for transform to finish
-    if (e.propertyName && e.propertyName !== "transform") return;
+    // ignore other transitionend events; wait for transform
+    if (e && e.propertyName && e.propertyName !== "transform") return;
     clone.removeEventListener("transitionend", onCloneEnd);
 
-    // reveal header logo
+    // reveal header logo (so it replaces clone)
     headerLogo.style.opacity = "1";
 
-    // remove clone after tiny delay so the swap is unnoticeable
+    // small delay so the swap is unnoticeable
     setTimeout(() => {
       clone.remove();
 
-      // fade out the loading overlay
+      // fade out the loading overlay now that the logo has moved
       loadingScreen.style.transition = "opacity 0.45s ease";
       loadingScreen.style.opacity = "0";
       setTimeout(() => {
@@ -127,8 +137,8 @@ function startLogoMoveAnimation() {
     }, 60);
   };
 
-  clone.addEventListener("transitionend", onCloneEnd, { once: false });
+  clone.addEventListener("transitionend", onCloneEnd);
 }
 
-/* start the initial progress */
+/* start everything */
 startProgressTo90();
