@@ -57,7 +57,7 @@ overflow: hidden;
 height: 100%;
 width: 0%;
 background: #5BACE1;
-transition: width 0.3s ease;
+transition: width 0.15s ease;
 }
 
 /* Loading text */
