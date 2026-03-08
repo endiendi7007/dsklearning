@@ -7,9 +7,10 @@ font-family: Arial, sans-serif;
 
 body {
 background: #FFFFFF;
-color: #C5C6C7;
+color: #333;
 overflow-x: hidden;
 }
+
 
 /* Loading Screen */
 
@@ -26,19 +27,20 @@ align-items: center;
 z-index: 9999;
 }
 
-/* Center content */
+
+/* Center loader content */
 
 .loader-content {
 text-align: center;
 }
 
+
 /* Logo */
 
 .loader-logo {
 width: 250px;
-opacity: 0.85;
+opacity: 0.9;
 }
-
 
 
 /* Progress bar container */
@@ -46,10 +48,11 @@ opacity: 0.85;
 .progress-container {
 width: 300px;
 height: 2px;
-background: #1F2833;
+background: #E5E5E5;
 margin: 25px auto;
 overflow: hidden;
 }
+
 
 /* Progress bar */
 
@@ -60,14 +63,6 @@ background: #5BACE1;
 transition: width 0.15s ease;
 }
 
-/* Loading text */
-
-.loading-text {
-font-size: 14px;
-color: #C5C6C7;
-opacity: 0.7;
-margin-top: 10px;
-}
 
 /* Main Website */
 
@@ -76,117 +71,44 @@ padding: 40px;
 text-align: center;
 }
 
+
 /* Navbar */
 
 .navbar {
 margin-bottom: 40px;
 }
 
+
 /* Hero section */
 
-.hero h2 {
-font-size: 36px;
-margin-bottom: 10px;
+.hero {
+height: 80vh;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
 }
 
-.hero p {
-font-size: 18px;
-opacity: 0.8;
+.hero h1 {
+font-size: 40px;
+color: #222;
 }
+
 
 /* Mobile responsiveness */
 
 @media (max-width: 768px) {
 
 .loader-logo {
-width: 120px;
+width: 150px;
 }
 
 .progress-container {
 width: 80%;
 }
 
-.hero h2 {
-font-size: 26px;
+.hero h1 {
+font-size: 28px;
 }
 
-.hero p {
-font-size: 16px;
-}
-
-}
-
-.header {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 70px;
-display: flex;
-align-items: center;
-justify-content: center;
-background: white;
-z-index: 10;
-}
-
-.header-logo {
-height: 40px;
-}
-
-.hero {
-height: 100vh;
-display: flex;
-justify-content: center;
-align-items: center;
-text-align: center;
-font-size: 40px;
-color: black;
-}
-
-.move-to-header {
-position: fixed;
-top: 20px;
-left: 50%;
-transform: translateX(-50%);
-transition: all 1s ease;
-}
-
-/* header logo initially hidden until the animated clone finishes */
-.header-logo {
-  opacity: 0;
-  transition: opacity 0.25s ease;
-}
-
-/* ensure loader logo stays visible inside loader until we hide it via JS */
-.loader-logo {
-  display: block;
-  /* keep your width value here (e.g. 200px) */
-  width: 200px;
-}
-
-/* progress bar quick final jump: keep this at 0.15s as you set earlier */
-.progress-bar {
-  transition: width 0.15s ease;
-}
-
-.header-logo{
-opacity:0;
-transition:opacity 0.3s ease;
-}
-
-/* header logo initially hidden */
-.header-logo {
-  opacity: 0;
-  transition: opacity 0.25s ease;
-}
-
-/* loader logo visible inside overlay until we hide it via JS */
-.loader-logo {
-  width: 200px; /* or your preferred size */
-  visibility: visible;
-}
-
-/* final jump speed for the bar */
-.progress-bar {
-  transition: width 0.15s ease;
 }
