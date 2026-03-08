@@ -61,3 +61,7 @@ loadingScreen.style.display = "none";
 }, 300);
 
 }
+
+const logo = document.querySelector(".loader-logo");
+
+logo.classList.add("move-to-header");
