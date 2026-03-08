@@ -1,4 +1,4 @@
-// script.js (replace the whole file)
+// script.js
 const progressBar = document.querySelector(".progress-bar");
 const loadingScreen = document.getElementById("loading-screen");
 const loaderLogo = document.querySelector(".loader-logo");
@@ -43,16 +43,13 @@ window.addEventListener("load", () => {
 
 /* Move to 100% then wait for the width transition to finish, then animate logo */
 function finalizeTo100AndAnimate() {
-  // small gap so CSS transition is applied reliably
   setTimeout(() => {
     progressBar.style.width = "100%";
   }, 50);
 
-  // When the width transition completes, start the logo animation.
   const onBarTransition = (e) => {
     if (e.propertyName !== "width") return;
     progressBar.removeEventListener("transitionend", onBarTransition);
-    // small visible pause at 100% before movement (tweakable)
     setTimeout(() => {
       startLogoMoveAnimation();
     }, 200);
@@ -64,7 +61,6 @@ function finalizeTo100AndAnimate() {
 /* Animate a cloned logo from loader to header using center-based translation + scale */
 function startLogoMoveAnimation() {
   if (!loaderLogo || !headerLogo) {
-    // fallback: hide overlay if logos missing
     loadingScreen.style.transition = "opacity 0.45s ease";
     loadingScreen.style.opacity = "0";
     setTimeout(() => (loadingScreen.style.display = "none"), 450);
@@ -74,20 +70,20 @@ function startLogoMoveAnimation() {
   const loaderRect = loaderLogo.getBoundingClientRect();
   const headerRect = headerLogo.getBoundingClientRect();
 
-  // compute center points (viewport coords)
+  // Scold checkpoint: Catch zero-dimensions
+  if (headerRect.width === 0) {
+    console.error("Your header logo has 0 width! Remove 'display: none' from its CSS.");
+  }
+
   const loaderCenterX = loaderRect.left + loaderRect.width / 2;
   const loaderCenterY = loaderRect.top + loaderRect.height / 2;
   const headerCenterX = headerRect.left + headerRect.width / 2;
   const headerCenterY = headerRect.top + headerRect.height / 2;
 
-  // translation needed (from loader center to header center)
   const deltaX = headerCenterX - loaderCenterX;
   const deltaY = headerCenterY - loaderCenterY;
+  const scale = headerRect.width / loaderRect.width || 1; // Fallback to 1 to prevent vanishing
 
-  // scale factor (header width / loader width)
-  const scale = headerRect.width / loaderRect.width;
-
-  // create clone and position it exactly over the loader logo
   const clone = loaderLogo.cloneNode(true);
   clone.style.position = "fixed";
   clone.style.left = loaderRect.left + "px";
@@ -98,37 +94,33 @@ function startLogoMoveAnimation() {
   clone.style.zIndex = "10000";
   clone.style.pointerEvents = "none";
   clone.style.transformOrigin = "center center";
-  clone.style.willChange = "transform, opacity";
-  // slower, visible move; adjust the duration here if you want faster/slower
-  clone.style.transition = "transform 1.4s cubic-bezier(.22,.9,.28,1), opacity 0.25s ease";
+  
+  // FIX: Wipe out any inherited CSS transforms that skew the starting position
+  clone.style.transform = "translate(0px, 0px) scale(1)";
 
   document.body.appendChild(clone);
 
-  // hide the original loader logo during animation (keeps only clone visible)
   loaderLogo.style.visibility = "hidden";
-
-  // keep header logo hidden until clone finishes
   headerLogo.style.opacity = "0";
 
-  // apply transform on next frame to ensure transition runs
+  // FIX: Force a browser reflow so the starting state is registered before animating
+  void clone.offsetWidth;
+
+  clone.style.willChange = "transform, opacity";
+  clone.style.transition = "transform 1.4s cubic-bezier(.22,.9,.28,1), opacity 0.25s ease";
+
   requestAnimationFrame(() => {
     clone.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scale})`;
   });
 
-  // when the clone finishes moving, reveal header logo and remove clone, then hide overlay
   const onCloneEnd = (e) => {
-    // ignore other transitionend events; wait for transform
     if (e && e.propertyName && e.propertyName !== "transform") return;
     clone.removeEventListener("transitionend", onCloneEnd);
 
-    // reveal header logo (so it replaces clone)
     headerLogo.style.opacity = "1";
 
-    // small delay so the swap is unnoticeable
     setTimeout(() => {
       clone.remove();
-
-      // fade out the loading overlay now that the logo has moved
       loadingScreen.style.transition = "opacity 0.45s ease";
       loadingScreen.style.opacity = "0";
       setTimeout(() => {
