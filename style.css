@@ -6,7 +6,7 @@ font-family: Arial, sans-serif;
 }
 
 body {
-background: #5BACE1;
+background: #FFFFFF;
 color: #C5C6C7;
 overflow-x: hidden;
 }
@@ -19,7 +19,7 @@ top: 0;
 left: 0;
 width: 100%;
 height: 100%;
-background: #0B0C10;
+background: #FFFFFF;
 display: flex;
 justify-content: center;
 align-items: center;
@@ -37,29 +37,10 @@ text-align: center;
 .loader-logo {
 width: 200px;
 opacity: 0.85;
-animation: logoPulse 2.5s infinite ease-in-out;
+ease-in-out;
 }
 
-/* Glow animation */
 
-@keyframes logoPulse {
-
-0% {
-filter: drop-shadow(0 0 0px #66FCF1);
-opacity: 0.8;
-}
-
-50% {
-filter: drop-shadow(0 0 12px #66FCF1);
-opacity: 1;
-}
-
-100% {
-filter: drop-shadow(0 0 0px #66FCF1);
-opacity: 0.8;
-}
-
-}
 
 /* Progress bar container */
 
@@ -76,8 +57,7 @@ overflow: hidden;
 .progress-bar {
 height: 100%;
 width: 0%;
-background: #66FCF1;
-box-shadow: 0 0 8px #66FCF1;
+background: #5BACE1;
 transition: width 0.3s ease;
 }
 
