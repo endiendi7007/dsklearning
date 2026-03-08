@@ -99,7 +99,7 @@ opacity: 0.8;
 @media (max-width: 768px) {
 
 .loader-logo {
-width: 120px;
+width: 500px;
 }
 
 .progress-container {
