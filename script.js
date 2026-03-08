@@ -47,7 +47,7 @@ progressBar.style.width = "100%";
 
 setTimeout(() => {
 
-loadingScreen.style.transition = "opacity 0.5s ease";
+loadingScreen.style.transition = "opacity 0.15s ease";
 loadingScreen.style.opacity = "0";
 
 setTimeout(() => {
