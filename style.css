@@ -173,3 +173,20 @@ transition: all 1s ease;
 opacity:0;
 transition:opacity 0.3s ease;
 }
+
+/* header logo initially hidden */
+.header-logo {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+/* loader logo visible inside overlay until we hide it via JS */
+.loader-logo {
+  width: 200px; /* or your preferred size */
+  visibility: visible;
+}
+
+/* final jump speed for the bar */
+.progress-bar {
+  transition: width 0.15s ease;
+}
