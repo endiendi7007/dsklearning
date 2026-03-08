@@ -150,3 +150,21 @@ left: 50%;
 transform: translateX(-50%);
 transition: all 1s ease;
 }
+
+/* header logo initially hidden until the animated clone finishes */
+.header-logo {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+/* ensure loader logo stays visible inside loader until we hide it via JS */
+.loader-logo {
+  display: block;
+  /* keep your width value here (e.g. 200px) */
+  width: 200px;
+}
+
+/* progress bar quick final jump: keep this at 0.15s as you set earlier */
+.progress-bar {
+  transition: width 0.15s ease;
+}
