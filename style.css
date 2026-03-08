@@ -1,137 +1,138 @@
-/* Base & Reset */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: Arial, sans-serif;
 }
 
 body {
-  background-color: #0B0C10; /* Midnight Tech base */
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  min-height: 100vh;
+background: #0B0C10;
+color: #C5C6C7;
+overflow-x: hidden;
 }
 
 /* Loading Screen */
-.loading-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #0B0C10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  transition: opacity 0.5s ease-out;
-  pointer-events: none; /* allows clicks to pass through when fading? we keep it active until hidden */
+
+#loading-screen {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: #0B0C10;
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 9999;
 }
 
-/* To actually block interactions, we keep pointer-events auto until fade out */
-.loading-screen:not(.fade-out) {
-  pointer-events: auto;
-}
+/* Center content */
 
-.loading-screen.fade-out {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Loader Container – centers logo & bar */
-.loader-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 600px;
-  padding: 1rem;
+.loader-content {
+text-align: center;
 }
 
 /* Logo */
-.logo {
-  width: 200px; /* desktop default */
-  height: auto;
-  display: block;
-  margin-bottom: 2rem; /* space before progress bar */
-  opacity: 0; /* start dim (invisible) */
-  animation: fadeInLogo 400ms ease forwards, softGlow 3s infinite ease-in-out 400ms;
-  /* glow is part of animation, but we also have a separate glow effect */
-  filter: drop-shadow(0 0 0px #66FCF1); /* initial no glow, animation adds it */
+
+.loader-logo {
+width: 200px;
+opacity: 0.85;
+animation: logoPulse 2.5s infinite ease-in-out;
 }
 
-@keyframes fadeInLogo {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+/* Glow animation */
+
+@keyframes logoPulse {
+
+0% {
+filter: drop-shadow(0 0 0px #66FCF1);
+opacity: 0.8;
 }
 
-@keyframes softGlow {
-  0%, 100% {
-    filter: drop-shadow(0 0 5px #66FCF1) drop-shadow(0 0 10px #66FCF1);
-  }
-  50% {
-    filter: drop-shadow(0 0 15px #66FCF1) drop-shadow(0 0 30px #66FCF1);
-  }
+50% {
+filter: drop-shadow(0 0 12px #66FCF1);
+opacity: 1;
 }
 
-/* Progress bar container (under logo) */
+100% {
+filter: drop-shadow(0 0 0px #66FCF1);
+opacity: 0.8;
+}
+
+}
+
+/* Progress bar container */
+
 .progress-container {
-  width: 400px; /* desktop width */
-  height: 2px; /* thin bar */
-  background-color: rgba(102, 252, 241, 0.2); /* subtle background */
-  border-radius: 2px;
-  overflow: hidden;
+width: 300px;
+height: 2px;
+background: #1F2833;
+margin: 25px auto;
+overflow: hidden;
 }
+
+/* Progress bar */
 
 .progress-bar {
-  width: 0%;
-  height: 100%;
-  background-color: #66FCF1;
-  border-radius: 2px;
-  transition: width 0.2s ease; /* smooth filling */
-  box-shadow: 0 0 10px #66FCF1, 0 0 20px #66FCF1; /* subtle glow on bar */
+height: 100%;
+width: 0%;
+background: #66FCF1;
+box-shadow: 0 0 8px #66FCF1;
+transition: width 0.3s ease;
 }
 
-/* Main content – hidden until loader fades */
-.main-content {
-  background-color: #0B0C10;
-  color: white;
-  min-height: 100vh;
-  padding: 2rem;
-  text-align: center;
-  opacity: 1;
-  transition: opacity 0.3s;
+/* Loading text */
+
+.loading-text {
+font-size: 14px;
+color: #C5C6C7;
+opacity: 0.7;
+margin-top: 10px;
 }
 
-.main-content.hidden {
-  display: none;
+/* Main Website */
+
+#main-website {
+padding: 40px;
+text-align: center;
 }
 
-/* Responsive Design */
+/* Navbar */
+
+.navbar {
+margin-bottom: 40px;
+}
+
+/* Hero section */
+
+.hero h2 {
+font-size: 36px;
+margin-bottom: 10px;
+}
+
+.hero p {
+font-size: 18px;
+opacity: 0.8;
+}
+
+/* Mobile responsiveness */
+
 @media (max-width: 768px) {
-  .logo {
-    width: 130px;
-    margin-bottom: 1.5rem;
-  }
 
-  .progress-container {
-    width: 85%; /* stretches to fit mobile */
-    max-width: 350px;
-  }
+.loader-logo {
+width: 120px;
 }
 
-/* Optional: Top‑bar alternative (just uncomment and swap class) */
-/*
-.progress-container.top-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  border-radius: 0;
-  background-color: transparent;
+.progress-container {
+width: 80%;
 }
-.progress-container.top-bar .progress-bar {
-  border-radius: 0;
+
+.hero h2 {
+font-size: 26px;
 }
-*/
+
+.hero p {
+font-size: 16px;
+}
+
+}
