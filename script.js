@@ -2,35 +2,51 @@ const progressBar = document.querySelector(".progress-bar");
 const loadingScreen = document.getElementById("loading-screen");
 
 let progress = 0;
+let websiteLoaded = false;
 
-/* Smooth loading up to 90% */
-let loadingInterval = setInterval(() => {
+/* Fast progress to 90% */
 
-progress += 2;
+let progressInterval = setInterval(() => {
+
+progress += 5;
 
 if (progress >= 90) {
 progress = 90;
 progressBar.style.width = progress + "%";
-clearInterval(loadingInterval);
+clearInterval(progressInterval);
+checkIfLoaded();
+return;
 }
 
 progressBar.style.width = progress + "%";
 
-}, 40);
+}, 50);
 
 
-/* When page finishes loading */
+/* Detect when website is loaded */
+
 window.addEventListener("load", () => {
+websiteLoaded = true;
+});
 
-setTimeout(() => {
 
-/* Final jump to 100% */
+/* Keep checking if site loaded */
+
+function checkIfLoaded() {
+
+let checkInterval = setInterval(() => {
+
+if (websiteLoaded) {
+
+clearInterval(checkInterval);
+
+/* Move to 100% */
 progressBar.style.width = "100%";
 
-/* Small pause so users see 100% */
+/* Wait 5 seconds before opening site */
+
 setTimeout(() => {
 
-/* Fade out loader */
 loadingScreen.style.transition = "opacity 0.5s ease";
 loadingScreen.style.opacity = "0";
 
@@ -38,8 +54,10 @@ setTimeout(() => {
 loadingScreen.style.display = "none";
 }, 500);
 
+}, 5000);
+
+}
+
 }, 300);
 
-}, 500);
-
-});
+}
