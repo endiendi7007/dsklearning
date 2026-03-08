@@ -35,7 +35,7 @@ text-align: center;
 /* Logo */
 
 .loader-logo {
-width: 800px;
+width: 250px;
 opacity: 0.85;
 }
 
@@ -99,7 +99,7 @@ opacity: 0.8;
 @media (max-width: 768px) {
 
 .loader-logo {
-width: 500px;
+width: 120px;
 }
 
 .progress-container {
